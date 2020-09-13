@@ -19,10 +19,6 @@ This file is quite similar to a `package.json` in a NodeJS-project or a `Cargo.t
 
 This file is similar to `package-lock.json` in a NodeJS-project or a `Cargo.lock` in a Rust-project. It could also be compared to the `go.sum` file in a Go project. It locks down the exact dependencies (until you explicitly update them at some later point).
 
-## `shell.nix`
-
-This is something very common in the Nix world. This file defines the development environment for a project. In this case, this is also where we load the `devshell.toml` which is just a way to define the development environment in a simpler way. It does allow you to ALSO add a `devshell.nix` file where you could do more advanced things - but that is optional.
-
 ## `devshell.toml`
 
 This is really THE file relevant to the project. This is where dependencies go and environment variables go.
