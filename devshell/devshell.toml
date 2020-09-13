@@ -1,20 +1,14 @@
 # Add the packages you need for this project, possibly using specific versions.
 # For example:
 #
-# packages = [ "nodejs-10_x", "go_1_14", "google-cloud-sdk" ]
-# or
 # packages = [ "nodejs-14_x", "go_1_15", "google-cloud-sdk" ]
 
-# Add any environment variables not considered secret
+# To find the packages, you need to know their names of course. You can search for
+# packages like this::
+#
+# $ nix search nixpkgs nodejs
+
+# Add any environment variables (not considered secret)
 #
 # [env]
-# SOME_ENVIRONMENT_VARIABLE = "content"
-
-###############################################################
-# Complete example, just comment below out to test it:
-# packages = [ "nodejs-14_x", "go_1_15", "google-cloud-sdk" ]
-
-# Add any environment variables not considered secret
-#
-# [env]
-# SOME_ENVIRONMENT_VARIABLE = "content"
+# IN_DEVSHELL = "1"
