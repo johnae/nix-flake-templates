@@ -1,4 +1,5 @@
-## The origin of this flake is https://github.com/johnae/nix-flake-templates/devshell.
+## The template this flake was based on can be found here:
+## https://github.com/johnae/nix-flake-templates/devshell
 {
   description = "A simple flake";
 
