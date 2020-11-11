@@ -1,3 +1,3 @@
 # nix-flake-templates
 
-For overriding the "builtin" ones from here: https://github.com/nixos/templates
+Like these https://github.com/nixos/templates
