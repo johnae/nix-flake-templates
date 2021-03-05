@@ -1,0 +1,45 @@
+{
+  "nodes": {
+    "nix-misc": {
+      "inputs": {
+        "nixpkgs": [
+          "nixpkgs"
+        ]
+      },
+      "locked": {
+        "lastModified": 1614982895,
+        "narHash": "sha256-+pBrDvgSEwQ4lkT9FSum4kQLFsH0pvCT9d+pNvnK6rQ=",
+        "owner": "johnae",
+        "repo": "nix-misc",
+        "rev": "472771b39ea46740a1d081f9e4ac5f3765619353",
+        "type": "github"
+      },
+      "original": {
+        "owner": "johnae",
+        "repo": "nix-misc",
+        "type": "github"
+      }
+    },
+    "nixpkgs": {
+      "locked": {
+        "lastModified": 1614535430,
+        "narHash": "sha256-kZwi0CooIOmFrk9eIteYSZIr4a4DVTEYV7UnURs6DSM=",
+        "path": "/nix/store/2siiq99hnsz7k4q5809i7iqhijl9bpvi-source",
+        "rev": "0aeba64fb26e4defa0842a942757144659c6e29f",
+        "type": "path"
+      },
+      "original": {
+        "id": "nixpkgs",
+        "type": "indirect"
+      }
+    },
+    "root": {
+      "inputs": {
+        "nix-misc": "nix-misc",
+        "nixpkgs": "nixpkgs"
+      }
+    }
+  },
+  "root": "root",
+  "version": 7
+}
