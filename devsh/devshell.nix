@@ -1,7 +1,8 @@
-#{ansiEsc, mkDevShell, sops }: ## just add dependencies here and then include them in the "packages" below within mkDevShell
-{ ansiEsc, mkDevShell }:
+#{mkDevShell, sops, kubectl }: ## just add dependencies here and then include them in the "packages" below within mkDevShell
+{ mkDevShell }:
 
 let
+  ansiEsc = code: "[${toString code}m";
   reset = ansiEsc 0;
   bold = ansiEsc 1;
   green = ansiEsc 32;
