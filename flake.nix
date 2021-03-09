@@ -7,12 +7,12 @@
 
       shell = {
         path = ./shell;
-        description = "A flake for dev shells - simple";
+        description = "A flake for dev shells - simple and easy to understand";
       };
 
       devshell = {
         path = ./devshell;
-        description = "A flake for toml-based dev shells - even simpler to use";
+        description = "A flake for toml-based dev shells - somewhat simpler to use but also less obvious";
       };
 
       app = {

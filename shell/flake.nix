@@ -1,22 +1,31 @@
+## The template this flake was based on can be found here:
+## https://github.com/johnae/nix-flake-templates/shell
 {
-  description = "A simple flake";
+  description = "Simple Devshell";
 
-  inputs.flake-utils.url = "github:numtide/flake-utils";
   inputs.nix-misc = {
     url = "github:johnae/nix-misc";
     inputs.nixpkgs.follows = "nixpkgs";
   };
 
   outputs = { self, nixpkgs, ... }@inputs:
-    inputs.flake-utils.lib.simpleFlake {
-      inherit self nixpkgs;
-      name = "snowflake";
-      config.allowUnfree = true; ## we're fine using nonfree software
-      preOverlays = [
-        inputs.nix-misc.overlay
-      ];
-      systems = inputs.flake-utils.lib.defaultSystems;
-      shell = ./shell.nix;
-    }
-  ;
+    let
+      supportedSystems = [ "x86_64-linux" "x86_64-darwin" ];
+      forAllSystems = f: nixpkgs.lib.genAttrs supportedSystems (system: f system);
+    in
+    {
+      overlay = final: prev: {
+        mkDevShell = prev.callPackage final.mkSimpleShell { };
+      };
+      devShell = forAllSystems
+        (system:
+          let
+            pkgs = import nixpkgs {
+              inherit system;
+              overlays = [ self.overlay inputs.nix-misc.overlay ];
+            };
+          in
+          pkgs.callPackage ./devshell.nix { }
+        );
+    };
 }
