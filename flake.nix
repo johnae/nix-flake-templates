@@ -20,6 +20,11 @@
         description = "A flake more suited to building an application";
       };
 
+      rustapp = {
+        path = ./rustapp;
+        description = "A flake for rust development";
+      };
+
     };
 
     defaultTemplate = self.templates.shell;
