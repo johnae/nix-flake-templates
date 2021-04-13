@@ -35,7 +35,7 @@
       #{
       #  overlay = final: prev: {
       #    my-app = prev.rustPlatform.buildRustPackage (package prev);
-      #  }
+      #  };
       #} //
       forAllSystems (system:
         let
