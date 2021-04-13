@@ -32,24 +32,20 @@
       supportedSystems = [ "x86_64-linux" "x86_64-darwin" ];
       forAllSystems = f: nixpkgs.lib.genAttrs supportedSystems (system: f system);
     in
-      #{
-      #  overlay = final: prev: {
-      #    my-app = prev.rustPlatform.buildRustPackage (package prev);
-      #  };
-      #} //
-      forAllSystems (system:
-        let
-          pkgs = import nixpkgs {
-            localSystem = { inherit system; };
-            overlays = [ fenix.overlay ];
-          };
-          rustPlatform = pkgs.makeRustPlatform {
-            inherit (fenix.packages.${system}.minimal) cargo rustc;
-          };
-        in
+      let
+        pkgs = forAllSystems (system: import inputs.nixpkgs {
+          localSystem = { inherit system; };
+          overlays = [ fenix.overlay ];
+        });
+        rustPlatform = forAllSystems (system: pkgs.${system}.makeRustPlatform {
+          inherit (fenix.packages.${system}.minimal) cargo rustc;
+        });
+      in
         {
-          # defaultPackage = rustPlatform.buildRustPackage (package pkgs);
-          devShell = import ./devshell.nix { inherit pkgs; };
-        }
-      );
+          # overlay = final: prev: {
+          #   my-app = prev.rustPlatform.buildRustPackage (package prev);
+          # };
+          # defaultPackage = forAllSystems (system: rustPlatform.${system}.buildRustPackage (package pkgs.${system}));
+          devShell = forAllSystems (system: import ./devshell.nix { pkgs = pkgs.${system}; });
+        };
 }
