@@ -33,7 +33,7 @@
       forAllSystems = f: nixpkgs.lib.genAttrs supportedSystems (system: f system);
     in
       let
-        pkgs = forAllSystems (system: import inputs.nixpkgs {
+        pkgs = forAllSystems (system: import nixpkgs {
           localSystem = { inherit system; };
           overlays = [ fenix.overlay ];
         });
