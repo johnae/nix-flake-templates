@@ -18,7 +18,7 @@
         });
       in
         {
-          defaultPackage = forAllSystems (system: pkgs.${system}.dockerTools.buildLayeredImage (pkgs.${system}.callPackage ./image.nix { }));
+          defaultPackage = forAllSystems (system: pkgs.${system}.callPackage ./image.nix { });
           devShell = forAllSystems (system: import ./devshell.nix { pkgs = pkgs.${system}; });
         };
 }
