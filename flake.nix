@@ -20,6 +20,11 @@
         description = "A flake more suited to building an application";
       };
 
+      container = {
+        path = ./container;
+        description = "A flake more suited to building a container";
+      };
+
       rustapp = {
         path = ./rustapp;
         description = "A flake for rust development";
