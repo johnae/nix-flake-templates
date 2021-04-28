@@ -30,7 +30,7 @@
                   docker-archive:${image} \
                   docker://${image.imageName}:${imageTag} 1>&2
                 echo pushed to: ${image.imageName}:${imageTag} 1>&2
-                echo store path: ${image.outPath}
+                echo ${image.outPath}
               '';
             })
           ];
