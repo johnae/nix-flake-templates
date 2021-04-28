@@ -74,7 +74,9 @@
         );
 
         packages = forAllSystems (system:
-          containerImageArchives.${system} // containerImagePushScripts.${system} // pushAll.${system}
+          containerImageArchives.${system} //
+          containerImagePushScripts.${system} //
+          pushAll.${system}
         );
       in
         {
