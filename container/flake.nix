@@ -1,5 +1,5 @@
 {
-  description = "Build a container";
+  description = "Flake for building container images";
 
   inputs.nix-misc = {
     url = "github:johnae/nix-misc";
@@ -8,11 +8,13 @@
 
   outputs = { self, nixpkgs, nix-misc, ... }:
     let
+      ## NOTE: you can build archives for say x86_64-darwin but they won't work anywhere
       supportedSystems = [ "x86_64-linux" ];
       forAllSystems = f: nixpkgs.lib.genAttrs supportedSystems (system: f system);
+      genAttrs' = values: f: builtins.listToAttrs (map f values);
     in
       let
-        pkgs = forAllSystems (system: import nixpkgs {
+        pkgset = forAllSystems (system: import nixpkgs {
           localSystem = { inherit system; };
           overlays = [
             nix-misc.overlay
@@ -33,21 +35,34 @@
             })
           ];
         });
-        dockerArchive = forAllSystems (system: pkgs.${system}.callPackage ./image.nix {
-          dockerRegistry = "flake-example/example";
-          # dockerTag = "latest"; # without this the tag becomes the hash of the nix build
-        });
-        pushArchive = forAllSystems (system: pkgs.${system}.pushDockerArchive { image = dockerArchive.${system}; });
+        containerImageArchives = forAllSystems (system:
+          let
+            pkgs = pkgset.${system};
+            imageDir = ./images;
+            genFullPath = name: imageDir + "/${name}";
+            imagePaths = map genFullPath (builtins.attrNames (builtins.readDir imageDir));
+          in
+            genAttrs' imagePaths (path: {
+              name = (pkgs.lib.removeSuffix ".nix" (builtins.baseNameOf path));
+              value = pkgs.callPackage path {
+                    dockerRegistry = "flake-example";
+                    # dockerTag = "latest"; # without specifying this the tag is the hash of the derivation which is usually what you want
+                  };
+            }));
+
+        containerImagePushScripts = forAllSystems (system:
+          let
+            pkgs = pkgset.${system};
+          in
+            pkgs.lib.mapAttrs' (name: value: pkgs.lib.nameValuePair ("${name}-push") (pkgs.pushDockerArchive { image = value; }))
+              containerImageArchives.${system});
+
+        packages = forAllSystems (system:
+          containerImageArchives.${system} // containerImagePushScripts.${system}
+        );
       in
         {
-          defaultPackage = dockerArchive;
-          packages = forAllSystems (system:
-            {
-              dockerImage = {
-                image = dockerArchive.${system};
-                push = pushArchive.${system};
-              };
-            });
-          devShell = forAllSystems (system: import ./devshell.nix { pkgs = pkgs.${system}; });
+          inherit packages;
+          devShell = forAllSystems (system: import ./devshell.nix { pkgs = pkgset.${system}; });
         };
 }
