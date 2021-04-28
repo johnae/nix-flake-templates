@@ -24,7 +24,7 @@
                   imageTag = if tag != null then tag else
                     builtins.head (prev.lib.splitString "-" (builtins.baseNameOf image.outPath));
                 in
-                prev.writeStrictShellScript "pushDockerArchive" ''
+                prev.writeStrictShellScript "push-docker-archive" ''
                 echo pushing ${image.imageName}:${imageTag} 1>&2
                 ${prev.skopeo}/bin/skopeo copy "$@" \
                   docker-archive:${image} \
@@ -59,8 +59,22 @@
             pkgs.lib.mapAttrs' (name: value: pkgs.lib.nameValuePair ("${name}-push") (pkgs.pushDockerArchive { image = value; }))
               containerImageArchives.${system});
 
+        pushAll = forAllSystems (system:
+          let
+            pkgs = pkgset.${system};
+          in
+            {
+              pushAll = pkgs.writeStrictShellScript "push-all" ''
+                ${
+                  pkgs.lib.concatStringsSep "\n"
+                  (pkgs.lib.mapAttrsToList (_: script: script) containerImagePushScripts.${system})
+                 }
+              '';
+            }
+        );
+
         packages = forAllSystems (system:
-          containerImageArchives.${system} // containerImagePushScripts.${system}
+          containerImageArchives.${system} // containerImagePushScripts.${system} // pushAll.${system}
         );
       in
         {
