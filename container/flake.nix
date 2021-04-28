@@ -41,9 +41,7 @@
             imageDir = ./images;
             genFullPath = name: imageDir + "/${name}";
             imagePaths = map genFullPath (
-              builtins.attrNames (
-                pkgs.lib.filterAttrs (_: t: t == "regular") (builtins.readDir imageDir)
-              )
+              builtins.attrNames (builtins.readDir imageDir)
             );
           in
             genAttrs' imagePaths (path: {
