@@ -1,41 +1,40 @@
 {
-  description = "A flake";
+  description = "Some application";
 
-  inputs.flake-utils.url = "github:numtide/flake-utils";
-  inputs.nix-misc = {
-    url = "github:johnae/nix-misc";
-    inputs.nixpkgs.follows = "nixpkgs";
-  };
-
-  outputs = { self, nixpkgs, flake-utils, ... }@inputs:
-    {
-      overlay = final: prev: {
-        helloApp = final.callPackage ./. { inherit self; };
+  outputs = { self, nixpkgs, ... }:
+    let
+      package = pkgs: {
+        pname = "my-app";
+        version = "v0.0.0";
+        src = self;
+        doCheck = false;
+        nativeBuildInputs = [ pkgs.pkgconfig ];
+        buildInputs = [ ];
+        meta = {
+          license = pkgs.stdenv.lib.licenses.mit;
+          maintainers = [
+            {
+              email = "me@myself.org";
+              github = "me";
+              name = "Me Me Me";
+            }
+          ];
+        };
       };
-    } // (
-      flake-utils.lib.eachDefaultSystem
-        (system:
-          let
-            pkgs = nixpkgs.legacyPackages.${system};
-            defaultPackage =
-              (import nixpkgs {
-                inherit system;
-                overlays = [ self.overlay inputs.nix-misc.overlay ];
-              }).helloApp;
-            helloApp = flake-utils.lib.mkApp {
-              drv = defaultPackage;
-              exePath = "/bin/hello";
-            };
-          in
-          {
-            inherit defaultPackage;
-            packages = flake-utils.lib.flattenTree {
-              helloApp = defaultPackage;
-            };
-            apps.helloApp = helloApp;
-            defaultApp = helloApp;
-            devShell = import ./shell.nix { inherit pkgs; };
-          }
-        )
-    );
+      supportedSystems = [ "x86_64-linux" "x86_64-darwin" ];
+      forAllSystems = f: nixpkgs.lib.genAttrs supportedSystems (system: f system);
+    in
+      let
+        pkgs = forAllSystems (system: import nixpkgs {
+          localSystem = { inherit system; };
+          overlays = [ self.overlay ];
+        });
+      in
+        {
+          overlay = final: prev: {
+            my-app = prev.stdenv.mkDerivation (package prev);
+          };
+          defaultPackage = forAllSystems (system: pkgs.${system}.stdenv.mkDerivation (package pkgs.${system}));
+          devShell = forAllSystems (system: import ./devshell.nix { pkgs = pkgs.${system}; });
+        };
 }
