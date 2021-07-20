@@ -1,16 +1,27 @@
 { pkgs }:
 
+let
+  inherit (pkgs.fenix.default)
+    cargo
+    clippy-preview
+    rust-std
+    rustc
+    rustfmt-preview
+  ;
+  inherit (pkgs.fenix.latest)
+    rust-src
+  ;
+in
+
 pkgs.mkShell {
   buildInputs = [
-    (pkgs.rust-nightly.latest.withComponents [
-      "cargo"
-      "clippy-preview"
-      "rust-src"
-      "rust-std"
-      "rustc"
-      "rustfmt-preview"
-    ])
-    pkgs.rust-analyzer-nightly
+    cargo
+    clippy-preview
+    rust-std
+    rustc
+    rustfmt-preview
+    rust-src
+    pkgs.rust-analyzer
     pkgs.gcc
     pkgs.openssl
     pkgs.pkg-config
