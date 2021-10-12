@@ -13,6 +13,6 @@ mkDevShell {
     # sops
   ];
   intro = ''
-    ${bold}${green}   Welcome to Dev SH.${reset}
+    ${bold}${green}   Hello, world.${reset}
   '';
 }

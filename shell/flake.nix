@@ -8,24 +8,23 @@
     inputs.nixpkgs.follows = "nixpkgs";
   };
 
-  outputs = { self, nixpkgs, ... }@inputs:
+  outputs = { self, nixpkgs, nix-misc, ... }@inputs:
     let
       supportedSystems = [ "x86_64-linux" "x86_64-darwin" ];
-      forAllSystems = f: nixpkgs.lib.genAttrs supportedSystems (system: f system);
+      forAllSystems = nixpkgs.lib.genAttrs supportedSystems;
     in
     {
-      overlay = final: prev: {
-        mkDevShell = prev.callPackage final.mkSimpleShell { };
-      };
       devShell = forAllSystems
         (system:
           let
             pkgs = import nixpkgs {
               inherit system;
-              overlays = [ self.overlay inputs.nix-misc.overlay ];
+              overlays = [ nix-misc.overlay ];
             };
           in
-          pkgs.callPackage ./devshell.nix { }
+            pkgs.callPackage ./devshell.nix {
+              mkDevShell = pkgs.callPackage nix-misc.lib.mkSimpleShell {};
+            }
         );
     };
 }
