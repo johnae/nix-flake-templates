@@ -1,14 +1,69 @@
-# Add the packages you need for this project, possibly using specific versions.
-# For example:
-#
+# [devshell]
+# name = "my-awesome-project"
+
+### Help/intro text
+### While called "motd", I'd say this as a good place to introduce the project
+### and write some short notes on usage. This is displayed in the terminal when
+### entering the devshell (either through `nix develop` or using direnv).
+
+### Note that you can both use replacement strings for terminal colors and formatting + include output from a command as below (where we show the menu of commands).
+
+# motd = """
+# {bold}{106}My Awesome Project{reset}
+# 
+# This project does a bit of this and that. To use it you should first run the command "blargh" and then all your wishes come true.
+# 
+# $(type -p menu &>/dev/null && menu)
+# """
+
+### Add tools to be brought into your shell automatically.
 # packages = [ "nodejs-14_x", "go_1_15", "google-cloud-sdk" ]
 
-# To find the packages, you need to know their names of course. You can search for
-# packages like this::
-#
-# $ nix search nixpkgs nodejs
+### Commands
 
-# Add any environment variables (not considered secret)
-#
-# [env]
-# IN_DEVSHELL = "1"
+### If you'd rather list the tools and commands being brought in while
+### also providing some help text on each, use commands as below instead
+### of putting packages in the packages list above.
+
+# [[commands]]
+# package = "gitAndTools.hub" ## when the package and command aren't the same, you must specify the packages as well as the name of the command.
+# name = "hub"
+# help = "interact with github from the command line"
+# category = "utilities"
+
+# [[commands]]
+# name = "terraform"
+# help = "build you infrastructure declaratively"
+# category = "infrastructure"
+
+# [[commands]]
+# package = "nodejs-14_x"
+# name = "node"
+# help = "the javascript runtime"
+# category = "devtools"
+
+# [[commands]]
+# package = "go_1_15"
+# name = "go"
+# help = "the go compiler"
+# category = "devtools"
+
+# [[commands]]
+# package = "google-cloud-sdk"
+# name = "gcloud"
+# help = "the official cli tool for interacting with Google Cloud"
+# category = "infra"
+
+# [[commands]]
+# name = "blargh"
+# help = "makes all your wishes come true"
+
+### Environment variables
+
+# [[env]]
+# name = "GO11MODULE"
+# value = "on"
+# 
+# [[env]]
+# name = "MY_VARIABLE"
+# value = "123"

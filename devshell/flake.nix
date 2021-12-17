@@ -10,18 +10,28 @@
     inputs.nixpkgs.follows = "nixpkgs";
   };
 
-  outputs = { self, nixpkgs, ... }@inputs:
-    inputs.flake-utils.lib.simpleFlake {
-      inherit self nixpkgs;
-      name = "devshell";
-      config.allowUnfree = true; ## we're fine using nonfree software
-      preOverlays = [
-        inputs.nix-misc.overlay
-        inputs.devshell.overlay
-      ];
-      systems = inputs.flake-utils.lib.defaultSystems;
-      shell = { pkgs ? import <nixpkgs> { } }:
-        pkgs.mkDevShell.fromTOML ./devshell.toml;
-    }
+  outputs = { self, nixpkgs, devshell, nix-misc, flake-utils }:
+    let
+      forAllDefaultSystems = f: flake-utils.lib.eachDefaultSystem (system:
+        f system (
+          import nixpkgs {
+            inherit system;
+            overlays = [
+              devshell.overlay
+              nix-misc.overlay
+            ];
+          }
+        )
+      );
+    in
+      forAllDefaultSystems (system: pkgs:
+        {
+          devShell = pkgs.devshell.mkShell {
+            imports = [
+              (pkgs.devshell.importTOML ./devshell.toml)
+            ];
+          };
+        }
+      )
   ;
 }
