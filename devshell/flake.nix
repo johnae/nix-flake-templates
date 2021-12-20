@@ -12,17 +12,15 @@
 
   outputs = { self, nixpkgs, devshell, nix-misc, flake-utils }:
     let
-      forAllDefaultSystems = f: flake-utils.lib.eachDefaultSystem (system:
-        f system (
-          import nixpkgs {
-            inherit system;
-            overlays = [
-              devshell.overlay
-              nix-misc.overlay
-            ];
-          }
-        )
-      );
+      genPkgs = system: import nixpkgs {
+        inherit system;
+        overlays = [
+          devshell.overlay
+          nix-misc.overlay
+        ];
+      };
+      forAllDefaultSystems = f: flake-utils.lib.eachDefaultSystem
+        (system: f system (genPkgs system));
     in
       forAllDefaultSystems (system: pkgs:
         {
