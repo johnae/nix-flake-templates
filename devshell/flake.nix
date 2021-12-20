@@ -3,11 +3,13 @@
 {
   description = "A simple devshell flake";
 
-  inputs.flake-utils.url = "github:numtide/flake-utils";
-  inputs.devshell.url = "github:numtide/devshell";
-  inputs.nix-misc = {
-    url = "github:johnae/nix-misc";
-    inputs.nixpkgs.follows = "nixpkgs";
+  inputs = {
+    flake-utils.url = "github:numtide/flake-utils";
+    devshell.url = "github:numtide/devshell";
+    nix-misc = {
+      url = "github:johnae/nix-misc";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
 
   outputs = { self, nixpkgs, devshell, nix-misc, flake-utils }:
