@@ -12,26 +12,32 @@
     };
   };
 
-  outputs = { self, nixpkgs, devshell, nix-misc, flake-utils }:
-    let
-      genPkgs = system: import nixpkgs {
+  outputs = {
+    self,
+    nixpkgs,
+    devshell,
+    nix-misc,
+    flake-utils,
+  }: let
+    pkgsFor = system:
+      import nixpkgs {
         inherit system;
         overlays = [
           devshell.overlay
           nix-misc.overlay
         ];
       };
-      forAllDefaultSystems = f: flake-utils.lib.eachDefaultSystem
-        (system: f system (genPkgs system));
-    in
-      forAllDefaultSystems (system: pkgs:
-        {
-          devShell = pkgs.devshell.mkShell {
-            imports = [
-              (pkgs.devshell.importTOML ./devshell.toml)
-            ];
-          };
-        }
-      )
-  ;
+    forAllDefaultSystems = f:
+      flake-utils.lib.eachDefaultSystem
+      (system: f system (pkgsFor system));
+  in
+    forAllDefaultSystems (
+      system: pkgs: {
+        devShell = pkgs.devshell.mkShell {
+          imports = [
+            (pkgs.devshell.importTOML ./devshell.toml)
+          ];
+        };
+      }
+    );
 }
