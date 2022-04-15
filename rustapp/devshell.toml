@@ -1,0 +1,22 @@
+[devshell]
+name = "bongo"
+
+motd = """
+{bold}{106}Bongo bongo{reset}
+
+This is a tool similar to the official mongo mirror tool but built specifically for the needs of Planhat.
+
+$(type -p menu &>/dev/null && menu)
+"""
+
+[[commands]]
+package = "rustWithComponents"
+name = "cargo"
+help = "manage dependencies and the full build cycle of rust programs"
+category = "devtools"
+
+[[commands]]
+package = "rustWithComponents"
+name = "rustc"
+help = "the rust compiler"
+category = "devtools"
