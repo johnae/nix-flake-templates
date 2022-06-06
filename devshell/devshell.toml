@@ -32,7 +32,7 @@
 # category = "utilities"
 
 # [[commands]]
-# name = "terraform"
+# package = "terraform"
 # help = "build you infrastructure declaratively"
 # category = "infrastructure"
 
