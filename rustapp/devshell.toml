@@ -9,7 +9,7 @@ motd = """
 $(type -p menu &>/dev/null && menu)
 """
 
-packages = [ "fenix.rust-analyzer" ]
+packages = [ "fenix.rust-analyzer", "gcc" ]
 
 [language.rust]
 packageSet = "fenix.stable"
