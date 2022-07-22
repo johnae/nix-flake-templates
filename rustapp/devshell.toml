@@ -1,22 +1,23 @@
+imports = ["./devshell/modules/rust.nix"]
+
 [devshell]
-name = "bongo"
+name = "Rust app"
 
 motd = """
-{bold}{106}Bongo bongo{reset}
-
-This is a tool similar to the official mongo mirror tool but built specifically for the needs of Planhat.
+{bold}{106}A Rust app{reset}
 
 $(type -p menu &>/dev/null && menu)
 """
 
-[[commands]]
-package = "rustWithComponents"
-name = "cargo"
-help = "manage dependencies and the full build cycle of rust programs"
-category = "devtools"
+packages = [ "fenix.rust-analyzer" ]
 
-[[commands]]
-package = "rustWithComponents"
-name = "rustc"
-help = "the rust compiler"
-category = "devtools"
+[language.rust]
+packageSet = "fenix.stable"
+tools = [
+  "rustc",
+  "cargo",
+  "clippy",
+  "rustfmt",
+  "rust-src",
+  "rust-std",
+]
