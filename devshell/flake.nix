@@ -6,17 +6,12 @@
   inputs = {
     flake-utils.url = "github:numtide/flake-utils";
     devshell.url = "github:numtide/devshell";
-    nix-misc = {
-      url = "github:johnae/nix-misc";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
   };
 
   outputs = {
     self,
     nixpkgs,
     devshell,
-    nix-misc,
     flake-utils,
   }: let
     pkgsFor = system:
@@ -24,7 +19,6 @@
         inherit system;
         overlays = [
           devshell.overlay
-          nix-misc.overlay
         ];
       };
     forAllDefaultSystems = f:
