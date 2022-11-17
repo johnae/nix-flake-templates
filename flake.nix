@@ -14,6 +14,6 @@
       };
     };
 
-    defaultTemplate = self.templates.shell;
+    defaultTemplate = self.templates.devshell;
   };
 }
