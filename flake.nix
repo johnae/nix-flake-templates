@@ -5,7 +5,12 @@
     templates = {
       devshell = {
         path = ./devshell;
-        description = "A flake for toml-based dev shells - somewhat simpler to use but also less obvious";
+        description = "A flake for toml-based dev shells - deprecated";
+      };
+
+      devenv = {
+        path = ./devenv;
+        description = "A flake for devenv based projects, also based on flake.parts";
       };
 
       rustapp = {
@@ -14,6 +19,6 @@
       };
     };
 
-    defaultTemplate = self.templates.devshell;
+    defaultTemplate = self.templates.devenv;
   };
 }
