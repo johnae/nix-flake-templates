@@ -12,6 +12,21 @@
         path = ./rust;
         description = "A flake for rust development";
       };
+
+      go = {
+        path = ./go;
+        description = "A flake for go development";
+      };
+
+      javascript = {
+        path = ./javascript;
+        description = "A flake for javascript/typescript development";
+      };
+
+      terraform = {
+        path = ./terraform;
+        description = "A flake for terraform development";
+      };
     };
 
     defaultTemplate = self.templates.devenv;
