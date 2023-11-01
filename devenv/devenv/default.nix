@@ -1,18 +1,19 @@
 {
+  inputs,
   pkgs,
   ansiEscape,
   ...
-}: {
-  name = "devenv";
-
+}: rec {
+  name = "Devenv";
+  languages.nix.enable = true;
   packages = with pkgs; [
+    alejandra
   ];
-
   enterShell = ansiEscape ''
      echo -e "
-      {bold}{106}Devenv{reset}
+      {bold}{106}${name}{reset}
 
-      Yo hello!
+      This is a basic devenv flake.
     "
   '';
 }
