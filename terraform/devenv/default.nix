@@ -1,19 +1,22 @@
 {
+  inputs,
   pkgs,
   ansiEscape,
   ...
 }: rec {
-  name = "Go application";
-  languages.go.enable = true;
+  name = "Terraform";
+  languages.terraform.enable = true;
   languages.nix.enable = true;
   packages = with pkgs; [
     alejandra
+    taplo
+    tflint
   ];
   enterShell = ansiEscape ''
      echo -e "
-      {bold}{103}${name}{reset}
+      {bold}{120}${name}{reset}
 
-      This is a basic go application flake.
+      This is a basic terraform flake.
     "
   '';
 }
