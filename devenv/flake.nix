@@ -1,5 +1,5 @@
 {
-  description = "A Rust app";
+  description = "A devenv flake";
 
   inputs = {
     nixpkgs.url = "github:nixos/nixpkgs/nixpkgs-unstable";
