@@ -3,18 +3,13 @@
 
   outputs = {self}: {
     templates = {
-      devshell = {
-        path = ./devshell;
-        description = "A flake for toml-based dev shells - deprecated";
-      };
-
       devenv = {
         path = ./devenv;
-        description = "A flake for devenv based projects, also based on flake.parts";
+        description = "A generic flake for devenv based projects";
       };
 
-      rustapp = {
-        path = ./rustapp;
+      rust = {
+        path = ./rust;
         description = "A flake for rust development";
       };
     };
