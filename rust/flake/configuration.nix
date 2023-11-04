@@ -6,6 +6,7 @@
 }: {
   imports = [
     ./devenv.nix
+    ./packages.nix
   ];
   perSystem = {system, ...}: {
     _module.args.pkgs = import inputs.nixpkgs {
