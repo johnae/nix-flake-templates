@@ -27,6 +27,11 @@
         path = ./terraform;
         description = "A flake for terraform development";
       };
+
+      zig = {
+        path = ./zig;
+        description = "A flake for zig development";
+      };
     };
 
     defaultTemplate = self.templates.devenv;
